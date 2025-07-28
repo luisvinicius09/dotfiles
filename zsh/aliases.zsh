@@ -1,0 +1,5 @@
+alias lg="lazygit"
+alias ls="eza --icons -l --git"
+alias ssh="TERM=xterm-256color ssh"
+alias cat="bat"
+# alias tmux="tmux -f ~/.config/tmux/.tmux.conf"
