@@ -122,6 +122,7 @@ customCommands:
           \$(git diff --cached --stat)
           \$(git diff --cached)
           \"
+          rm -rf $HOME/.config/cursor
           "
     command: "git commit -m \"{{.Form.CommitMsg}}\""
     loadingText: "Generating commit messages..."
