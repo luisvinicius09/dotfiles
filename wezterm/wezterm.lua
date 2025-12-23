@@ -7,6 +7,8 @@ local config = wezterm.config_builder()
 
 config.default_cwd = wezterm.home_dir
 
+config.front_end = "OpenGL"
+
 config.font = wezterm.font("JetBrains Mono", {})
 config.font_size = 12
 
