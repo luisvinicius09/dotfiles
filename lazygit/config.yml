@@ -65,11 +65,12 @@ customCommands:
           The user has selected: \$SELECTED_TYPE
 
           Your task is to:
-          1. Analyze the code changes
+          1. Analyze the code changes thoroughly
           2. Determine the most appropriate commit type (if user selected 'ai-defined')
           3. Determine an appropriate scope (component/area affected)
           4. Decide if this is a breaking change
-          5. Write clear, concise commit messages
+          5. Write clear, descriptive commit messages
+          6. Decide if a commit body is needed (only for complex changes that need explanation)
 
           Available commit types:
           - feat: A new feature
@@ -92,28 +93,76 @@ customCommands:
           - Use exclamation mark (!) after type/scope for breaking changes: type(scope)!: description
           - Use lowercase for description (except proper nouns)
           - Use imperative mood (\\\"add\\\", not \\\"added\\\")
-          - Keep description under 50 characters when possible
+          - Be specific and descriptive - avoid vague terms like \\\"update\\\", \\\"change\\\", \\\"fix issues\\\"
+          - Include relevant context: what component, what behavior, what problem
+          - Aim for 50-72 characters when possible, but prioritize clarity over brevity
           - No period at the end of subject line
 
-          Examples:
-          - feat(auth): add OAuth login support
-          - fix(api): handle null response in user endpoint
-          - docs(readme): update installation instructions
-          - style(ui): improve button spacing consistency
-          - refactor(database): simplify query builder logic
-          - test(auth): add unit tests for login flow
-          - build(deps): upgrade React to version 18
-          - ci(github): fix deployment workflow
-          - chore(config): update ESLint rules
-          - perf(api)!: optimize database queries
+          Commit body guidelines (ONLY add when truly needed):
+          - Add a body ONLY for complex changes that need explanation beyond the subject line
+          - Simple, self-explanatory changes should have NO body (most commits)
+          - Body format: blank line after subject, then bullet points or paragraphs
+          - Body should explain WHY the change was made, not WHAT (the diff shows what)
+          - Use body for: breaking changes, complex refactors, non-obvious fixes, architectural decisions
+          - DO NOT use body for: simple feature additions, obvious bug fixes, documentation updates, style changes
 
-          IMPORTANT:
+          Examples of GOOD descriptive commits:
+
+          Simple commits (NO body needed):
+          - feat(auth): add OAuth2 login with Google and GitHub providers
+          - fix(api): prevent null pointer exception when user profile is missing
+          - fix(cart): resolve incorrect tax calculation for international orders
+          - docs(readme): add troubleshooting section for common setup errors
+          - style(dashboard): adjust card spacing to match design system grid
+          - test(checkout): add integration tests for payment processing flow
+          - build(deps): upgrade React to v18 for concurrent rendering features
+          - ci(github): add caching to speed up test workflow by 40%
+          - chore(config): update ESLint rules to enforce consistent imports
+
+          Complex commits (body IS helpful):
+          - refactor(database): extract query logic into reusable repository pattern
+
+          The previous implementation mixed business logic with data access,
+          making it difficult to test and reuse queries across services.
+          This change introduces a repository layer that centralizes all
+          database operations and provides a clean API for the service layer.
+
+          - perf(api)!: optimize database queries with connection pooling
+
+          BREAKING CHANGE: Database connection configuration format has changed.
+          Update your .env file to use the new DATABASE_POOL_SIZE variable.
+
+          Previous queries were creating new connections for each request,
+          causing 2-3s response times under load. New implementation maintains
+          a connection pool, reducing average response time to 200ms.
+
+          - feat(notifications)!: replace email library with new provider
+
+          BREAKING CHANGE: Email template format has changed from HTML strings
+          to template files in /templates/email directory.
+
+          The previous library was deprecated and had security vulnerabilities.
+          New provider offers better deliverability, template management, and
+          analytics tracking.
+
+          Examples of POOR commits to avoid:
+          - fix: bug fix (too vague - what bug? where?)
+          - feat: add feature (what feature?)
+          - refactor: update code (what code? why?)
+          - chore: changes (meaningless)
+          - fix(api): fix (doesn't explain what was fixed)
+          - feat(ui): update button (update how? why?)
+
+          OUTPUT FORMAT:
+          - For commits WITHOUT body: just output the subject line
+          - For commits WITH body: output subject line, then blank line, then body
           - Generate exactly \$COMMITS_TO_SUGGEST different commit message options
           - If user selected 'ai-defined', you can use different types for different options
           - If user selected a specific type, all messages must use that type
-          - Only return commit messages, no explanations
+          - Make each option meaningfully different - vary scope, focus, or level of detail
+          - Only return commit messages, no explanations or meta-commentary
           - Do not use markdown code blocks
-          - One message per line
+          - Separate each commit option with a line containing only: ---COMMIT---
 
           Previous commits for context:
           \$(git log --oneline -10)
@@ -121,8 +170,29 @@ customCommands:
           Changes to analyze:
           \$(git diff --cached --stat)
           \$(git diff --cached)
-          \"
+          \" | awk '
+          BEGIN { RS=\"---COMMIT---\"; ORS=\"\" }
+          NR > 1 {
+            # Trim whitespace
+            gsub(/^[\\n\\r\\t ]+|[\\n\\r\\t ]+$/, \"\", \$0)
+            if (length(\$0) > 0) {
+              # Extract first line as the display text
+              match(\$0, /^[^\\n]+/)
+              display = substr(\$0, RSTART, RLENGTH)
+              # Store full commit message (subject + body if present)
+              full = \$0
+              # Output in format: display|||full
+              print display \"|||\" full \"\\n\"
+            }
+          }
+          '
           rm -rf $HOME/.config/cursor
           "
-    command: "git commit -m \"{{.Form.CommitMsg}}\""
+    command: |
+      bash -c "
+      # Split on ||| to get display and full message
+      COMMIT_DATA=\"{{.Form.CommitMsg}}\"
+      FULL_MSG=\$(echo \"\$COMMIT_DATA\" | cut -d'|' -f3-)
+      git commit -m \"\$FULL_MSG\"
+      "
     loadingText: "Generating commit messages..."
