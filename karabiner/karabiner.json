@@ -4,6 +4,19 @@
             "complex_modifications": {
                 "rules": [
                     {
+                        "description": "Option + F smart fullscreen (toggle if managed, maximize if floating)",
+                        "manipulators": [
+                            {
+                                "from": {
+                                    "key_code": "f",
+                                    "modifiers": { "mandatory": ["left_option"] }
+                                },
+                                "to": [{ "shell_command": "/bin/bash -c 'if [ \"$(/opt/homebrew/bin/yabai -m query --windows --window | /opt/homebrew/bin/jq -r \".\\\"is-floating\\\"\")\" = \"true\" ]; then /opt/homebrew/bin/yabai -m window --grid 1:1:0:0:1:1; else /opt/homebrew/bin/yabai -m window --toggle zoom-fullscreen; fi'" }],
+                                "type": "basic"
+                            }
+                        ]
+                    },
+                    {
                         "description": "Option + C to center floating window",
                         "manipulators": [
                             {
@@ -175,22 +188,6 @@
                                     "modifiers": { "mandatory": ["left_option"] }
                                 },
                                 "to": [{ "shell_command": "/opt/homebrew/bin/yabai -m window --resize right:40:0" }],
-                                "type": "basic"
-                            }
-                        ]
-                    },
-                    {
-                        "description": "Option + F to toggle fullscreen with yabai",
-                        "manipulators": [
-                            {
-                                "from": {
-                                    "key_code": "f",
-                                    "modifiers": {
-                                        "mandatory": ["left_option"],
-                                        "optional": ["any"]
-                                    }
-                                },
-                                "to": [{ "shell_command": "/opt/homebrew/bin/yabai -m window --toggle zoom-fullscreen" }],
                                 "type": "basic"
                             }
                         ]
