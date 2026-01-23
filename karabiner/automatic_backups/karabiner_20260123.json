@@ -4,32 +4,7 @@
             "complex_modifications": {
                 "rules": [
                     {
-                        "description": "Option + Shift + H/L to move windows between displays",
-                        "enabled": false,
-                        "manipulators": [
-                            {
-                                "description": "Option + Shift + H to move window to display west (left)",
-                                "from": {
-                                    "key_code": "h",
-                                    "modifiers": { "mandatory": ["left_option", "left_shift"] }
-                                },
-                                "to": [{ "shell_command": "/opt/homebrew/bin/yabai -m window --display west" }],
-                                "type": "basic"
-                            },
-                            {
-                                "description": "Option + Shift + L to move window to display east (right)",
-                                "from": {
-                                    "key_code": "l",
-                                    "modifiers": { "mandatory": ["left_option", "left_shift"] }
-                                },
-                                "to": [{ "shell_command": "/opt/homebrew/bin/yabai -m window --display east" }],
-                                "type": "basic"
-                            }
-                        ]
-                    },
-                    {
                         "description": "Option + F smart fullscreen (toggle if managed, maximize if floating)",
-                        "enabled": false,
                         "manipulators": [
                             {
                                 "from": {
@@ -42,13 +17,12 @@
                         ]
                     },
                     {
-                        "description": "Option + M to center floating window",
-                        "enabled": false,
+                        "description": "Option + C to center floating window",
                         "manipulators": [
                             {
-                                "description": "Option + M to center window on screen",
+                                "description": "Option + C to center window on screen",
                                 "from": {
-                                    "key_code": "m",
+                                    "key_code": "c",
                                     "modifiers": { "mandatory": ["left_option"] }
                                 },
                                 "to": [{ "shell_command": "/opt/homebrew/bin/yabai -m window --grid 4:4:1:1:2:2" }],
@@ -57,13 +31,12 @@
                         ]
                     },
                     {
-                        "description": "Option + T to toggle window management",
-                        "enabled": false,
+                        "description": "Option + M to toggle window management",
                         "manipulators": [
                             {
-                                "description": "Option + T to toggle managed/unmanaged window",
+                                "description": "Option + F12 to toggle managed/unmanaged window",
                                 "from": {
-                                    "key_code": "t",
+                                    "key_code": "m",
                                     "modifiers": { "mandatory": ["left_option"] }
                                 },
                                 "to": [{ "shell_command": "/opt/homebrew/bin/yabai -m window --toggle float" }],
@@ -156,65 +129,63 @@
                         ]
                     },
                     {
-                        "description": "Option + hjkl to move focus between windows and displays with yabai",
-                        "enabled": false,
+                        "description": "Option + hjkl to move focus between windows with yabai",
                         "manipulators": [
                             {
-                                "description": "Option + H to focus window west (left) or display",
+                                "description": "Option + H to focus window west (left)",
                                 "from": {
                                     "key_code": "h",
                                     "modifiers": { "mandatory": ["left_option"] }
                                 },
-                                "to": [{ "shell_command": "/opt/homebrew/bin/yabai -m window --focus west || /opt/homebrew/bin/yabai -m display --focus west" }],
+                                "to": [{ "shell_command": "/opt/homebrew/bin/yabai -m window --focus west" }],
                                 "type": "basic"
                             },
                             {
-                                "description": "Option + J to focus window south (down) or display",
+                                "description": "Option + J to focus window south (down)",
                                 "from": {
                                     "key_code": "j",
                                     "modifiers": { "mandatory": ["left_option"] }
                                 },
-                                "to": [{ "shell_command": "/opt/homebrew/bin/yabai -m window --focus south || /opt/homebrew/bin/yabai -m display --focus south" }],
+                                "to": [{ "shell_command": "/opt/homebrew/bin/yabai -m window --focus south" }],
                                 "type": "basic"
                             },
                             {
-                                "description": "Option + K to focus window north (up) or display",
+                                "description": "Option + K to focus window north (up)",
                                 "from": {
                                     "key_code": "k",
                                     "modifiers": { "mandatory": ["left_option"] }
                                 },
-                                "to": [{ "shell_command": "/opt/homebrew/bin/yabai -m window --focus north || /opt/homebrew/bin/yabai -m display --focus north" }],
+                                "to": [{ "shell_command": "/opt/homebrew/bin/yabai -m window --focus north" }],
                                 "type": "basic"
                             },
                             {
-                                "description": "Option + L to focus window east (right) or display",
+                                "description": "Option + L to focus window east (right)",
                                 "from": {
                                     "key_code": "l",
                                     "modifiers": { "mandatory": ["left_option"] }
                                 },
-                                "to": [{ "shell_command": "/opt/homebrew/bin/yabai -m window --focus east || /opt/homebrew/bin/yabai -m display --focus east" }],
+                                "to": [{ "shell_command": "/opt/homebrew/bin/yabai -m window --focus east" }],
                                 "type": "basic"
                             }
                         ]
                     },
                     {
-                        "description": "Option + Shift + Hyphen/Equal for resizing windows",
-                        "enabled": false,
+                        "description": "Option + Hyphen/Equal for resizing windows",
                         "manipulators": [
                             {
-                                "description": "Hyper + Shift + - to decrease window size horizontally",
+                                "description": "Hyper + - to decrease window size horizontally",
                                 "from": {
                                     "key_code": "hyphen",
-                                    "modifiers": { "mandatory": ["left_option", "left_shift"] }
+                                    "modifiers": { "mandatory": ["left_option"] }
                                 },
                                 "to": [{ "shell_command": "/opt/homebrew/bin/yabai -m window --resize right:-40:0" }],
                                 "type": "basic"
                             },
                             {
-                                "description": "Hyper + Shift + = to increase window size horizontally",
+                                "description": "Hyper + = to increase window size horizontally",
                                 "from": {
                                     "key_code": "equal_sign",
-                                    "modifiers": { "mandatory": ["left_option", "left_shift"] }
+                                    "modifiers": { "mandatory": ["left_option"] }
                                 },
                                 "to": [{ "shell_command": "/opt/homebrew/bin/yabai -m window --resize right:40:0" }],
                                 "type": "basic"
