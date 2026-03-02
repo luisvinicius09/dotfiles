@@ -62,7 +62,7 @@ customCommands:
           SELECTED_TYPE=\"{{.Form.Type}}\"
           COMMITS_TO_SUGGEST=8
 
-          cursor-agent --output-format text \"
+          claude --model claude-haiku-4-5 --output-format text -p \"
 
           You are an expert at writing Git commits. Your job is to write commit messages that follow the Conventional Commits format.
 
@@ -126,7 +126,6 @@ customCommands:
           \$(git diff --cached --stat)
           \$(git diff --cached)
           \"
-          rm -rf $HOME/.config/cursor
           "
     command: "git commit -m \"{{.Form.CommitMsg}}\""
     loadingText: "Generating commit messages..."
