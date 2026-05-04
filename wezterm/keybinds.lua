@@ -34,6 +34,9 @@ elseif platform.is_win or platform.is_linux then
 	mod.SUPER_REV = "ALT|CTRL"
 end
 
+-- Pane modifier: CMD on mac, CTRL|SHIFT on windows/linux
+local pane_mod = platform.is_mac and "SUPER" or "CTRL|SHIFT"
+
 keysMapping.keys = {
 	-- Move forward by word
 	{
@@ -71,6 +74,67 @@ keysMapping.keys = {
 		key = "t",
 		mods = mod.SUPER,
 		action = act.SpawnCommandInNewTab({ cwd = wezterm.home_dir, domain = "DefaultDomain" }),
+	},
+
+	-- Pane: split vertical (side by side)
+	{
+		key = "|",
+		mods = pane_mod,
+		action = act.SplitHorizontal({ domain = "CurrentPaneDomain" }),
+	},
+	-- Pane: split horizontal (on top of each other)
+	{
+		key = "-",
+		mods = pane_mod,
+		action = act.SplitVertical({ domain = "CurrentPaneDomain" }),
+	},
+	-- Pane: navigate with arrows
+	{
+		key = "LeftArrow",
+		mods = pane_mod,
+		action = act.ActivatePaneDirection("Left"),
+	},
+	{
+		key = "RightArrow",
+		mods = pane_mod,
+		action = act.ActivatePaneDirection("Right"),
+	},
+	{
+		key = "UpArrow",
+		mods = pane_mod,
+		action = act.ActivatePaneDirection("Up"),
+	},
+	{
+		key = "DownArrow",
+		mods = pane_mod,
+		action = act.ActivatePaneDirection("Down"),
+	},
+	-- Pane: navigate with hjkl
+	{
+		key = "h",
+		mods = pane_mod,
+		action = act.ActivatePaneDirection("Left"),
+	},
+	{
+		key = "l",
+		mods = pane_mod,
+		action = act.ActivatePaneDirection("Right"),
+	},
+	{
+		key = "k",
+		mods = pane_mod,
+		action = act.ActivatePaneDirection("Up"),
+	},
+	{
+		key = "j",
+		mods = pane_mod,
+		action = act.ActivatePaneDirection("Down"),
+	},
+	-- Pane: close
+	{
+		key = "w",
+		mods = pane_mod,
+		action = act.CloseCurrentPane({ confirm = false }),
 	},
 }
 
