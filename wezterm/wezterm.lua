@@ -30,4 +30,10 @@ config.adjust_window_size_when_changing_font_size = false
 
 config.enable_kitty_keyboard = true
 
+-- Dim inactive panes for visual distinction
+config.inactive_pane_hsb = {
+	saturation = 0.7,
+	brightness = 0.6,
+}
+
 return config
